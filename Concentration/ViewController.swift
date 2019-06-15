@@ -9,23 +9,34 @@
 import UIKit
 
 class ViewController: UIViewController {
-    lazy var game = Concentration(numberOfPairsOfCards: cardButtons.count + 1 / 2)
-    var flipCount = 0 {
-        didSet {
-            flipCountLabel.text = "Flips: \(flipCount)"
-        }
-    }
-    var emojiChoices = ["🎃", "👻", "🦇", "🍭", "🍬", "🍎", "😱", "🙀", "👿"]
+    lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+    let themes = [
+        ["🎃", "👻", "🦇", "🍭", "🍬", "🍎", "😱", "🙀", "👿", "💀"],
+        ["⚽️", "🏀", "🏈", "🏓", "🎾", "🥌", "🏹", "🥊", "🏐", "🥏"],
+        ["🐶", "🐱", "🐵", "🐹", "🦊", "🐼", "🐨", "🦁", "🐮", "🐧"],
+        ["🍏", "🍐", "🍋", "🍊", "🍌", "🍉", "🍇", "🥝", "🍒", "🍓"],
+        ["🏴‍☠️", "🏁", "🏳️‍🌈", "🚩", "🏴", "🏳️", "🇪🇸", "🇬🇷", "🇦🇷", "🇧🇷"],
+        ["😀", "🤓", "😅", "😇", "😍", "😛", "☺️", "🥰", "🥳", "😎"],
+        ["🚜", "🚡", "🚋", "🛵", "🚲", "🚤", "🚌", "🚗", "🛩", "🚁"]
+    ]
+    lazy var emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
     var emoji = [Int: String]()
     @IBOutlet weak var flipCountLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet var cardButtons: [UIButton]!
     
     @IBAction func touchCard(_ sender: UIButton) {
-        flipCount += 1
         if let cardNumber = cardButtons.firstIndex(of: sender) {
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
         }
+    }
+    
+    @IBAction func newGame(_ sender: UIButton) {
+        game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+        emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
+        emoji = [Int: String]()
+        updateViewFromModel()
     }
     
     func updateViewFromModel() {
@@ -40,6 +51,8 @@ class ViewController: UIViewController {
                 button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0) : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
             }
         }
+        flipCountLabel.text = "Flips: \(game.flipCount)"
+        scoreLabel.text = "Score: \(game.score)"
     }
     
     func emoji(for card: Card) -> String {
