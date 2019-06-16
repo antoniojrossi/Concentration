@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         ["😀", "🤓", "😅", "😇", "😍", "😛", "☺️", "🥰", "🥳", "😎"],
         ["🚜", "🚡", "🚋", "🛵", "🚲", "🚤", "🚌", "🚗", "🛩", "🚁"]
     ]
-    private lazy var emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
+    private lazy var emojiChoices = themes[themes.count.arc4random]
     private var emoji = [Int: String]()
     @IBOutlet private weak var flipCountLabel: UILabel!
     @IBOutlet private weak var scoreLabel: UILabel!
@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     
     @IBAction private func newGame(_ sender: UIButton) {
         game = Concentration(numberOfPairsOfCards: numberOfPairOfCards)
-        emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
+        emojiChoices = themes[themes.count.arc4random]
         emoji = [Int: String]()
         updateViewFromModel()
     }
@@ -60,9 +60,14 @@ class ViewController: UIViewController {
     
     private func emoji(for card: Card) -> String {
         if emoji[card.identifier] == nil, emojiChoices.count > 0 {
-            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count)))
-            emoji[card.identifier] = emojiChoices.remove(at: randomIndex)
+            emoji[card.identifier] = emojiChoices.remove(at: emojiChoices.count.arc4random)
         }
         return emoji[card.identifier] ?? "?"
+    }
+}
+
+extension Int {
+    var arc4random: Int {
+        return Int(arc4random_uniform(UInt32(self)))
     }
 }
