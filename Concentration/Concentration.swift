@@ -10,7 +10,16 @@ import Foundation
 
 struct Concentration {
     private(set) var cards = [Card]()
-    private var indexOfOneAndOnlyFaceUpCard: Int?
+    private var indexOfOneAndOnlyFaceUpCard: Int? {
+        get {
+            return cards.indices.filter { cards[$0].isFaceUp }.oneAndOnly
+        }
+        set {
+            for index in cards.indices {
+                cards[index].isFaceUp = (index == newValue)
+            }
+        }
+    }
     private(set) var flipCount = 0
     private(set) var score = 0
     private var seenCardIndices = [Int]()
@@ -44,16 +53,19 @@ struct Concentration {
                     }
                 }
                 cards[index].isFaceUp = true
-                indexOfOneAndOnlyFaceUpCard = nil
             } else {
                 //either no cards or 2 cards are face up
-                for flipDownIndex in cards.indices {
-                    cards[flipDownIndex].isFaceUp = false
-                }
-                cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = index
             }
             flipCount += 1
+        }
+    }
+}
+
+extension Collection {
+    var oneAndOnly: Element? {
+        get {
+            return count == 1 ? first : nil
         }
     }
 }
