@@ -9,11 +9,11 @@
 import Foundation
 
 class Concentration {
-    var cards = [Card]()
-    var indexOfOneAndOnlyFaceUpCard: Int?
-    var flipCount = 0
-    var score = 0
-    var seenCardIndices = [Int]()
+    private(set) var cards = [Card]()
+    private var indexOfOneAndOnlyFaceUpCard: Int?
+    private(set) var flipCount = 0
+    private(set) var score = 0
+    private var seenCardIndices = [Int]()
     
     init(numberOfPairsOfCards: Int) {
         for _ in 1...numberOfPairsOfCards {
