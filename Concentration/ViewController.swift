@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         ["🚜", "🚡", "🚋", "🛵", "🚲", "🚤", "🚌", "🚗", "🛩", "🚁"]
     ]
     private lazy var emojiChoices = themes[themes.count.arc4random]
-    private var emoji = [Int: String]()
+    private var emoji = [Card: String]()
     @IBOutlet private weak var flipCountLabel: UILabel!
     @IBOutlet private weak var scoreLabel: UILabel!
     @IBOutlet private var cardButtons: [UIButton]!
@@ -38,7 +38,7 @@ class ViewController: UIViewController {
     @IBAction private func newGame(_ sender: UIButton) {
         game = Concentration(numberOfPairsOfCards: numberOfPairOfCards)
         emojiChoices = themes[themes.count.arc4random]
-        emoji = [Int: String]()
+        emoji = [Card: String]()
         updateViewFromModel()
     }
     
@@ -59,10 +59,10 @@ class ViewController: UIViewController {
     }
     
     private func emoji(for card: Card) -> String {
-        if emoji[card.identifier] == nil, emojiChoices.count > 0 {
-            emoji[card.identifier] = emojiChoices.remove(at: emojiChoices.count.arc4random)
+        if emoji[card] == nil, emojiChoices.count > 0 {
+            emoji[card] = emojiChoices.remove(at: emojiChoices.count.arc4random)
         }
-        return emoji[card.identifier] ?? "?"
+        return emoji[card] ?? "?"
     }
 }
 
